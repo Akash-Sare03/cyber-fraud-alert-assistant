@@ -1,48 +1,59 @@
-
-# app.py
-
 from flask import Flask, request, jsonify
-import joblib
-from cleaner import clean_text_mixed_with_stopwords
 from flask_cors import CORS
+import joblib
+import nltk
+from nltk.tokenize import word_tokenize
+import re
+import string
+
+# Download punkt tokenizer if not already downloaded
+nltk.download("punkt")
+
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests
+CORS(app)
 
-
-# Initialize Flask app
-app = Flask(__name__)
-
-# Load the model and vectorizer
+# Load the trained model
 model = joblib.load("fraud_model_lr.pkl")
-vectorizer = joblib.load("tfidf_vectorizer.pkl")
 
+# Text cleaning function
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(r"[^a-zA-Z\s\u0900-\u097F]", "", text)  # Retain Hindi chars
+    text = text.translate(str.maketrans("", "", string.punctuation))
+    tokens = word_tokenize(text)
+    return " ".join(tokens)
+
+# ✅ Home route with usage instructions
+@app.route("/", methods=["GET"])
+def home():
+    return """
+    <h2>🚨 Cyber Fraud Detection API</h2>
+    <p>Welcome to the Fraud Alert Assistant API.</p>
+    <p><strong>POST</strong> your suspicious message to <code>/predict</code> as JSON like:</p>
+    <pre>{
+  "message": "आपका PAN कार्ड ब्लॉक कर दिया गया है।"
+}</pre>
+    <p>You'll receive a JSON response with prediction: <code>'🚨 Scam'</code> or <code>'✅ Legit'</code></p>
+    <p>Made by Akash Sare 💡</p>
+    """
+
+# Prediction route
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
-
-    # Get message
     message = data.get("message", "")
-    if not message:
-        return jsonify({"error": "No message provided"}), 400
+    cleaned = clean_text(message)
+    prediction = model.predict([cleaned])[0]
+    label = "🚨 Scam" if prediction == 1 else "✅ Legit"
 
-    # Clean the message
-    cleaned = clean_text_mixed_with_stopwords(message)
-    vector = vectorizer.transform([cleaned])
-    prediction = model.predict(vector)[0]
-
-    result = "🚨 Scam" if prediction == 1 else "✅ Legit"
     return jsonify({
         "message": message,
         "cleaned": cleaned,
-        "prediction": result,
+        "prediction": label,
         "label": int(prediction)
     })
 
-# Run the app
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 5000))  # fallback to 5000 if PORT not set
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
-
-    
-
