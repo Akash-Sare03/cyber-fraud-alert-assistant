@@ -7,10 +7,8 @@ import re
 import string
 
 # Download punkt tokenizer if not already downloaded
-try:
-    nltk.data.find("tokenizers/punkt")
-except LookupError:
-    nltk.download("punkt")
+
+#nltk.download("punkt")
 
 
 app = Flask(__name__)
@@ -20,12 +18,14 @@ CORS(app)
 model = joblib.load("fraud_model_lr.pkl")
 
 # Text cleaning function
+# 🔁 Modified clean_text for production use:
 def clean_text(text):
     text = text.lower()
-    text = re.sub(r"[^a-zA-Z\s\u0900-\u097F]", "", text)  # Retain Hindi chars
+    text = re.sub(r"[^a-zA-Z\s\u0900-\u097F]", "", text)
     text = text.translate(str.maketrans("", "", string.punctuation))
-    tokens = word_tokenize(text)
+    tokens = text.split()  # No NLTK needed
     return " ".join(tokens)
+
 
 # ✅ Home route with usage instructions
 @app.route("/", methods=["GET"])
