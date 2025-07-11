@@ -7,7 +7,11 @@ import re
 import string
 
 # Download punkt tokenizer if not already downloaded
-nltk.download("punkt")
+try:
+    nltk.data.find("tokenizers/punkt")
+except LookupError:
+    nltk.download("punkt")
+
 
 app = Flask(__name__)
 CORS(app)

@@ -6,4 +6,8 @@ data = {
 }
 
 response = requests.post(url, json=data)
-print(response.json())
+if response.status_code == 200:
+    print(response.json())
+else:
+    print("Error:", response.status_code)
+    print(response.text)  # Print full HTML or message
