@@ -2,6 +2,12 @@ import nltk
 from nltk.tokenize import word_tokenize
 import re
 
+# Safe download: Only downloads 'punkt' if missing
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+
 # Hindi + Marathi stopwords (expand this list as needed)
 stopwords_hi_mr = set([
     "है", "के", "का", "की", "को", "में", "से", "पर", "और", "यह", "था",
