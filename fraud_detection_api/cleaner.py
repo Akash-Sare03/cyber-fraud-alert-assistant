@@ -1,12 +1,13 @@
 import nltk
-nltk.download('punkt')
-
-import re
 from nltk.tokenize import word_tokenize
+import re
 
-# Hindi + Marathi stopwords (add more later as needed)
+# Hindi + Marathi stopwords (expand this list as needed)
 stopwords_hi_mr = set([
-    "का", "कि", "के", "यह", "और", "पर", "से", "है", "था", "थे", "नाही", "आहे", "असे", "मध्ये", "आपला"
+    "है", "के", "का", "की", "को", "में", "से", "पर", "और", "यह", "था",
+    "था", "हो", "रहा", "हूँ", "आप", "हम", "वे", "जो", "भी", "नहीं",  "आहे", 
+    "च्या", "मध्ये", "वर","आणि", "तो", "ती", "हे", "की", "होते",
+    "नाही", "तुमचे", "आपण", "माझे", "तसेच"
 ])
 
 def clean_text_mixed_with_stopwords(text):
@@ -15,4 +16,3 @@ def clean_text_mixed_with_stopwords(text):
     tokens = word_tokenize(text)
     filtered = [word for word in tokens if word not in stopwords_hi_mr]
     return ' '.join(filtered)
-

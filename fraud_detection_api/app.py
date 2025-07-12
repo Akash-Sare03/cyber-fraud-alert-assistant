@@ -2,43 +2,25 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import nltk
-from nltk.tokenize import word_tokenize
-import re
-import string
+from cleaner import clean_text_mixed_with_stopwords
 
-# Download punkt tokenizer if not already downloaded
-
-#nltk.download("punkt")
-
+# Download NLTK tokenizer model at startup
+nltk.download('punkt')
 
 app = Flask(__name__)
 CORS(app)
 
-# Load the trained model
+# Load the saved ML model and vectorizer
 model = joblib.load("fraud_model_lr.pkl")
+vectorizer = joblib.load("tfidf_vectorizer.pkl")
 
-# Text cleaning function
-# 🔁 Modified clean_text for production use:
-def clean_text(text):
-    text = text.lower()
-    text = re.sub(r"[^a-zA-Z\s\u0900-\u097F]", "", text)
-    text = text.translate(str.maketrans("", "", string.punctuation))
-    tokens = text.split()  # No NLTK needed
-    return " ".join(tokens)
-
-
-# ✅ Home route with usage instructions
+# Home route for testing
 @app.route("/", methods=["GET"])
 def home():
     return """
     <h2>🚨 Cyber Fraud Detection API</h2>
-    <p>Welcome to the Fraud Alert Assistant API.</p>
-    <p><strong>POST</strong> your suspicious message to <code>/predict</code> as JSON like:</p>
-    <pre>{
-  "message": "आपका PAN कार्ड ब्लॉक कर दिया गया है।"
-}</pre>
-    <p>You'll receive a JSON response with prediction: <code>'🚨 Scam'</code> or <code>'✅ Legit'</code></p>
-    <p>Made by Akash Sare 💡</p>
+    <p>Send a POST request to <code>/predict</code> with your message:</p>
+    <pre>{ "message": "आपका अकाउंट बंद हो गया है..." }</pre>
     """
 
 # Prediction route
@@ -46,15 +28,35 @@ def home():
 def predict():
     data = request.get_json()
     message = data.get("message", "")
-    cleaned = clean_text(message)
-    prediction = model.predict([cleaned])[0]
+
+    # Step 1: Clean the message
+    cleaned = clean_text_mixed_with_stopwords(message)
+
+    # Step 2: Vectorize
+    vector_input = vectorizer.transform([cleaned])
+
+    # Step 3: Predict using ML model
+    prediction = model.predict(vector_input)[0]
     label = "🚨 Scam" if prediction == 1 else "✅ Legit"
+
+    # Step 4: Smart Boosting - Rule-based override
+    scam_keywords = [
+        "खाता", "ब्लॉक", "suspended", "बंद", "ACCOUNT BLOCK UPDATE KYC", "SHARE OTP", "link", "click", "संपर्क", "suspicious", "जीते"
+    ]
+    safe_patterns = [
+        "otp है", "otp:", "your otp", "पैमेंट सफल", "बिल सफल", "बुकिंग", "कन्फर्म", "सफलतापूर्वक"
+    ]
+    cleaned_lower = cleaned.lower()
+
+    if prediction == 0:  # If model says Legit
+        if any(word in cleaned_lower for word in scam_keywords):
+            if not any(pattern in cleaned_lower for pattern in safe_patterns):
+                label = "🚨 Scam (flagged by rule)"
 
     return jsonify({
         "message": message,
         "cleaned": cleaned,
-        "prediction": label,
-        "label": int(prediction)
+        "result": label
     })
 
 if __name__ == "__main__":
