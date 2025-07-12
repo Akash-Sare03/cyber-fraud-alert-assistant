@@ -11,8 +11,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the saved ML model and vectorizer
-model = joblib.load("fraud_model_lr.pkl")
-vectorizer = joblib.load("tfidf_vectorizer.pkl")
+model = joblib.load("fraud_model_lr_new.pkl")
+vectorizer = joblib.load("tfidf_vectorizer_new.pkl")
 
 # Home route for testing
 @app.route("/", methods=["GET"])
