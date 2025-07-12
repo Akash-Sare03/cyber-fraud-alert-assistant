@@ -1,14 +1,10 @@
 import nltk
+nltk.data.path.append("./nltk_data")  # Force NLTK to use local data
+
 from nltk.tokenize import word_tokenize
 import re
 
-# Safe download: Only downloads 'punkt' if missing
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt')
-
-# Hindi + Marathi stopwords (expand this list as needed)
+# Hindi + Marathi stopwords
 stopwords_hi_mr = set([
     "है", "के", "का", "की", "को", "में", "से", "पर", "और", "यह", "था",
     "था", "हो", "रहा", "हूँ", "आप", "हम", "वे", "जो", "भी", "नहीं",  "आहे", 
@@ -18,7 +14,7 @@ stopwords_hi_mr = set([
 
 def clean_text_mixed_with_stopwords(text):
     text = text.lower()
-    text = re.sub(r'[^ऀ-ॿa-zA-Z\s]', '', text)  # Keep Devanagari + English
+    text = re.sub(r'[^ऀ-ॿa-zA-Z\s]', '', text)
     tokens = word_tokenize(text)
     filtered = [word for word in tokens if word not in stopwords_hi_mr]
     return ' '.join(filtered)

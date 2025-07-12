@@ -4,8 +4,8 @@ import joblib
 import nltk
 from cleaner import clean_text_mixed_with_stopwords
 
-# Download NLTK tokenizer model at startup
-nltk.download('punkt')
+nltk.data.path.append("./nltk_data")
+
 
 app = Flask(__name__)
 CORS(app)
