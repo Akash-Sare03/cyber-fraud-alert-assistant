@@ -91,7 +91,7 @@ def predict():
     "timesofindia.indiatimes.com",  # News
     "ndtv.com",
     "moneycontrol.com",
-    "angleone.com"
+    "angleone.com",
     "zerodha.com",               # Stock broker
     "groww.in",
     "angelone.in",
