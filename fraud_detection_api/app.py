@@ -42,7 +42,7 @@ def predict():
     # Step 4: Smart Boosting - Rule-based override
     scam_keywords = [
         "खाता", "ब्लॉक", "suspended", "बंद", "ACCOUNT BLOCK UPDATE KYC", "SHARE OTP", "link", "click", "संपर्क",
-        "suspicious", "जीते", "Rummy", "Bonus" , "free gift," , "earn money"
+        "suspicious", "जीते", "Rummy", "Bonus" , "free gift" 
     ]
     safe_patterns = [
         "otp है", "otp:", "your otp", "पैमेंट सफल", "बिल सफल", "बुकिंग", "कन्फर्म", "सफलतापूर्वक", "Sucessfull"
