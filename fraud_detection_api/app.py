@@ -63,46 +63,56 @@ def predict():
     "call this number", "urgent verification required",
     "you are selected", "act now", "limited time offer"
     ]
+
     safe_patterns = [
-        "otp है", "otp:", "your otp", "पैमेंट सफल", "बिल सफल", "बुकिंग", "कन्फर्म", "सफलतापूर्वक", "Sucessfull" , "www.jio.com",
-    "www.airtel.in",
-    "www.amazon.in",
-    "www.flipkart.com",
-    "www.irctc.co.in",
-    "uidai.gov.in",                # Aadhaar
-    "incometax.gov.in",           # Income Tax
-    "sbi.co.in",                  # State Bank of India
-    "axisbank.com",
-    "hdfcbank.com",
-    "icicibank.com",
-    "kotak.com",
-    "yesbank.in",
-    "paytm.com",
-    "phonepe.com",
-    "google.com/pay",            # Google Pay
-    "npci.org.in",               # UPI backend
-    "bhimupi.org.in",
-    "digilocker.gov.in",
-    "mygov.in",
-    "echallan.parivahan.gov.in",  # Traffic challan
-    "mparivahan.gov.in",
-    "epfindia.gov.in",           # PF
-    "myelectricitybill.com",     # Utility (verify per state)
-    "timesofindia.indiatimes.com",  # News
-    "ndtv.com",
-    "moneycontrol.com",
-    "angleone.com",
-    "zerodha.com",               # Stock broker
-    "groww.in",
-    "angelone.in",
-    "coinmarketcap.com",  
+        "otp है", "otp:", "your otp", "पैमेंट सफल", "बिल सफल", "बुकिंग", "कन्फर्म", "सफलतापूर्वक", "Sucessfull" , "jio",
+    "airtel",
+    "amazon",
+    "flipkart",
+    "irctc",
+    "uidai",                # Aadhaar
+    "gov",           # Income Tax
+    "sbi",                  # State Bank of India
+    "axisbank",
+    "hdfcbank",
+    "icicibank",
+    "kotak",
+    "yesbank",
+    "paytm",
+    "phonepe",
+    "google",            # Google Pay
+    "npci",               # UPI backend
+    "bhimupi",
+    "digilocker",
+    "mygov",
+    "echallan",  # Traffic challan
+    "mparivahan",
+    "epfindia",           # PF
+    "myelectricitybill",     # Utility (verify per state)
+    "timesofindia",  # News
+    "ndtv",
+    "moneycontrol",
+    "zerodha",               # Stock broker
+    "groww",
+    "angelone",
+    "coinmarketcap",
+    "Coindcx"  
     ]
+
+    scam_keywords = [kw.lower() for kw in scam_keywords]
+    safe_patterns = [kw.lower() for kw in safe_patterns]
+
     cleaned_lower = cleaned.lower()
 
     if prediction == 0:  # If model says Legit
         if any(word in cleaned_lower for word in scam_keywords):
             if not any(pattern in cleaned_lower for pattern in safe_patterns):
                 label = "🚨 Scam (flagged by rule)"
+
+    elif prediction == 1: # # If model says scam
+        if any(word in cleaned_lower for word in safe_patterns):
+            if not any(pattern in cleaned_lower for pattern in scam_keywords):
+                label = "✅ Legit"
 
     return jsonify({
         "message": message,
