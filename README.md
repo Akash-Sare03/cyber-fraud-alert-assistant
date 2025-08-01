@@ -1,82 +1,82 @@
 # 🛡️ Cyber Fraud Alert Assistant
 
-A smart, multilingual fraud detection system that helps users identify scam messages in **English, Hindi, and Marathi** using a trained machine learning model and a Flutter-based mobile app.
+A smart multilingual system that helps users detect fraud messages in **English, Hindi, and Marathi** using a machine learning model and a Flutter-based mobile app.
 
 ---
 
-## 📌 Project Highlights
+## 📌 Project Overview
 
-- ✅ ML model trained on real-world Hindi, Marathi & English scam messages
-- 📲 Flutter mobile app that interacts with the ML API
-- 🔁 Real-time SMS detection (manual paste in v1, auto-SMS planned)
-- 🧠 NLP + TF-IDF based classification (Scam or Legit)
-- ☁️ Flask API hosted on Render for public access
+- ✅ Trained ML model on real scam/legit messages in Hindi, Marathi & English  
+- 📱 Flutter mobile app for message input and scam detection  
+- 🧠 Real-time prediction using a hosted Flask API on Render  
+- 🧪 Current version uses manual input; plans for auto detection and call monitoring  
 
 ---
 
-## 📱 Flutter App Demo
+1. **Flutter App** (mobile)  
+2. Sends POST request to **Flask API** with suspect message  
+3. Flask API preprocesses & vectorizes, runs **Logistic Regression** ML model  
+4. Returns prediction: **🚨 Scam** or **✅ Legit**  
+5. Flutter app displays result instantly
 
-> 🔎 Current version supports **manual pasting** of suspicious messages.
-> Future versions will include auto SMS detection, pop-up warnings, and scam call monitoring.
+---
 
-### English Message Test
+## 📱 App Demo: Scam vs Legit in 3 Languages
 
-| Scam Example | Legit Example |
-|--------------|---------------|
+### English
+| Scam | Legit |
+|------|-------|
 | ![Scam EN](./screenshots/scam_english.jpeg) | ![Legit EN](./screenshots/legit_english.jpeg) |
 
----
-
-### Hindi Message Test
-
-| Scam Example | Legit Example |
-|--------------|---------------|
+### Hindi
+| Scam | Legit |
+|------|-------|
 | ![Scam HI](./screenshots/scam_hindi.jpeg) | ![Legit HI](./screenshots/legit_hindi.jpeg) |
 
----
-
-### Marathi Message Test
-
-| Scam Example | Legit Example |
-|--------------|---------------|
+### Marathi
+| Scam | Legit |
+|------|-------|
 | ![Scam MR](./screenshots/scam_marathi.jpeg) | ![Legit MR](./screenshots/legit_marathi.jpeg) |
 
 ---
 
-## 🔍 ML Model Details
+## 🧠 ML Model Details
 
-- ✅ Preprocessing: Tokenization, stopword removal, lowercase normalization
-- 📊 Features: TF-IDF vectors
-- 🧠 Model: Logistic Regression (best accuracy after tuning)
-- 🧪 Accuracy: ~95% on multilingual messages
-
----
-
-## 🚀 Tech Stack
-
-| Layer        | Tech Used                        |
-|--------------|----------------------------------|
-| 🧠 ML Model  | scikit-learn, pandas, nltk       |
-| 🌐 API       | Flask, Python, Render Deployment |
-| 📱 App       | Flutter, Dart                    |
-| 📡 Communication | HTTP POST (JSON API)         |
+- Languages supported: **Marathi**, **Hindi**, **English**  
+- Text preprocessing: Lowercasing, Devanagari + English retention, stopword filtering  
+- Feature extraction: **TF-IDF vectorization**  
+- Model: **Logistic Regression** with ~95% accuracy on multilingual test sets  
+- Deployment: Flask backend with `clean_text_mixed_with_stopwords`, `CountVectorizer`, `joblib` pickle files
 
 ---
 
-## 🌟 Future Features & Ideas
+## 🛠️ Tech Stack
 
-| Feature                      | Description & Tools to Explore                                |
-|-----------------------------|----------------------------------------------------------------|
-| 📩 Auto SMS Detection        | `telephony` plugin (partially integrated)                      |
-| 🔔 Pop-up Scam Alert         | `flutter_local_notifications`, background service              |
-| 🧠 Fraud Call Detection      | `speech_to_text`, `Google Speech API`, `Vosk`, keyword spotting |
-| 📹 Video Call Scam Detector  | `flutter_webrtc` + `flutter_audio_capture` + audio ML model    |
-| 📊 Scan History              | Store past messages using SQLite (`sqflite` plugin)            |
-| 🌐 Web Panel (optional)      | Add admin dashboard with analytics using Django + React        |
+| Component       | Tech / Tools                          |
+|----------------|----------------------------------------|
+| ML Model        | Python, scikit-learn, NLTK             |
+| API             | Flask, Render hosting                  |
+| Mobile App      | Flutter, Dart, `http` and `telephony` plugin |
+| Communication   | HTTP POST (JSON)                       |
 
 ---
 
-## 📦 Folder Structure
+## 🚀 Future Roadmap & Tools
+
+| Feature                          | Description | Tools / Libraries |
+|----------------------------------|-------------|-------------------|
+| Auto SMS Detection              | Listen to incoming SMS & auto-analyze | `telephony` plugin |
+| Popup Scam Alerts               | Show notification toast/dialog when scam detected | `flutter_local_notifications`, background service |
+| Fraud Call / Video Call Detector| Analyze call or video audio in real-time to detect scam | `speech_to_text`, Google STT, Vosk, Whisper, audio ML models |
+| Fake Voice / Deepfake Detect    | Use voice fingerprinting to flag impersonation | `DeepSpeech` or custom audio embedding |
+| Scan History                    | Store message scans locally using SQLite | `sqflite` plugin |
+| ML on Device (offline mode)     | Use TFLite for local model inference | `tflite_flutter`, `onnxruntime` |
+| Analytics Dashboard             | Admin dashboard for scam trends | Streamlit, Dash, Flask + JS charts |
+| Multi-language NLP              | Add more language support | `IndicNLP`, `ai4bharat/indicBERT`, Hugging Face tokenizers |
+
+---
+
+## 📂 Repository Structure
 
 cyber-fraud-alert-assistant/
 ├── fraud_alert_app_new/ # Flutter App
@@ -90,13 +90,38 @@ cyber-fraud-alert-assistant/
 
 ---
 
+## 📥 How to Run Locally
+
+**Flask API & Flutter App:**
+```bash
+cd fraud_detection_api/
+pip install -r requirements.txt
+python app.py
+
+**Flutter App:**
+```bash
+cd fraud_alert_app_new/
+flutter pub get
+flutter run
+
+👏 Why This Project Matters
+**Combines ML and mobile for tackling cyber scams in local Indian languages**
+
+**Covers end-to-end flow: from text input to prediction display**
+
+**Demonstrates real-world problem-solving for rising scam threats**
+
+**Offers thoughtfully planned features for future scalability and user safety**
+
+
+
+---
+
 ## 🤝 Credits
 
 - Built by [Akash Sare](https://github.com/Akash-Sare03)
 - Thanks to open-source contributors for libraries used
 
----
 
-## 📬 Contact
 
-For queries, reach out at: `akashsare03@gmail.com`
+
