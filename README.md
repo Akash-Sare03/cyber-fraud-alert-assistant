@@ -94,7 +94,6 @@ cyber-fraud-alert-assistant/
 
 ### 🔹 Flask API
 
-```bash
 cd flask_api/
 pip install -r requirements.txt
 python app.py
