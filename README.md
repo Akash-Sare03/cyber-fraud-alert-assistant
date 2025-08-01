@@ -98,7 +98,7 @@ cyber-fraud-alert-assistant/
 - pip install -r requirements.txt
 - python app.py
 
-- Flutter App
+### 🔹 Flutter App
 - cd fraud_alert_app_new/
 - flutter pub get
 - flutter run
@@ -106,7 +106,7 @@ cyber-fraud-alert-assistant/
 ---
 
 
-👏 Why This Project Matters
+## 👏 Why This Project Matters
 
 - Combines ML and mobile for tackling cyber scams in local Indian languages
 
