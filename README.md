@@ -92,27 +92,29 @@ cyber-fraud-alert-assistant/
 
 ## 📥 How to Run Locally
 
-**Flask API & Flutter App:**
+### 🔹 Flask API
+
 ```bash
-cd fraud_detection_api/
+cd flask_api/
 pip install -r requirements.txt
 python app.py
 
-**Flutter App:**
-```bash
+Flutter App
 cd fraud_alert_app_new/
 flutter pub get
 flutter run
 
+---
+
+
 👏 Why This Project Matters
-**Combines ML and mobile for tackling cyber scams in local Indian languages**
+Combines ML and mobile for tackling cyber scams in local Indian languages
 
-**Covers end-to-end flow: from text input to prediction display**
+Covers end-to-end flow: from text input to prediction display
 
-**Demonstrates real-world problem-solving for rising scam threats**
+Demonstrates real-world problem-solving for rising scam threats
 
-**Offers thoughtfully planned features for future scalability and user safety**
-
+Offers thoughtfully planned features for future scalability and user safety
 
 
 ---
@@ -121,6 +123,7 @@ flutter run
 
 - Built by [Akash Sare](https://github.com/Akash-Sare03)
 - Thanks to open-source contributors for libraries used
+
 
 
 
